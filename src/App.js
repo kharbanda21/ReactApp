@@ -7,12 +7,23 @@ import "@ui5/webcomponents-fiori/dist/FlexibleColumnLayout.js";
 import "@ui5/webcomponents-fiori/dist/ShellBar";
 import "@ui5/webcomponents-icons/dist/AllIcons.js"
 
+import "@ui5/webcomponents/dist/Table.js";
+import "@ui5/webcomponents/dist/TableColumn.js";
+import "@ui5/webcomponents/dist/TableRow.js";
+import "@ui5/webcomponents/dist/TableCell.js";
+
+import "@ui5/webcomponents/dist/TabContainer";
+import "@ui5/webcomponents/dist/Tab";
+import "@ui5/webcomponents/dist/TabSeparator";
+
 function App() {
+  const [contacts, setContacts] = useState([]);
+  const [error, setError] = useState(null);
   const fcl = useRef();
 
   const col1list = useRef();
   const col2list = useRef();
-  
+
   const closeMidColumn = useRef();
   const closeEndColumn = useRef();
 
@@ -36,7 +47,11 @@ function App() {
   }, []);
 
   const handleFullScreenMidCol = useCallback(() => {
-    fcl.current.layout = "MidColumnFullScreen";
+    if (fcl.current.layout !== "MidColumnFullScreen") {
+      fcl.current.layout = "MidColumnFullScreen";
+    } else {
+      fcl.current.layout = "TwoColumnsMidExpanded";
+    }
   }, []);
 
   const handleFullScreenEndCol = useCallback(() => {
@@ -44,22 +59,40 @@ function App() {
   }, []);
 
   useEffect(() => {
-    col1list.current.addEventListener("item-click", handleRowClick);
-    col2list.current.addEventListener("item-click", handleRowClick2);
+    // axios("https://jsonplaceholder.typicode.com/users")
+    //   .then((response) => {
+    //     setContacts(response.data);
+    //     setError(null);
+    //   })
+    //   .catch(setError);
+
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((response) => {
+        setContacts(response);
+        setError(null);
+      })
+      .catch(setError);
+
+  }, []);
+
+  useEffect(() => {
+    col1list.current.addEventListener("row-click", handleRowClick);
+    // col2list.current.addEventListener("item-click", handleRowClick2);
     closeMidColumn.current.addEventListener("click", handleCloseMidCol);
     closeEndColumn.current.addEventListener("click", handleCloseEndCol);
     fullscreenMidColumn.current.addEventListener("click", handleFullScreenMidCol);
     fullscreenEndColumn.current.addEventListener("click", handleFullScreenEndCol);
     return () => {
-      col1list.current.removeEventListener("item-click", handleRowClick);
-      col2list.current.removeEventListener("item-click", handleRowClick2);
-    	closeMidColumn.current.removeEventListener("click", handleCloseMidCol);
+      col1list.current.removeEventListener("row-click", handleRowClick);
+      // col2list.current.removeEventListener("item-click", handleRowClick2);
+      closeMidColumn.current.removeEventListener("click", handleCloseMidCol);
       closeEndColumn.current.removeEventListener("click", handleCloseEndCol);
       fullscreenMidColumn.current.removeEventListener("click", handleFullScreenMidCol);
       fullscreenEndColumn.current.removeEventListener("click", handleFullScreenEndCol);
     };
-    
-  }, [handleRowClick,handleRowClick2,handleCloseMidCol,handleCloseEndCol,handleFullScreenMidCol,]);
+
+  }, [handleRowClick, handleRowClick2, handleCloseMidCol, handleCloseEndCol, handleFullScreenMidCol,]);
 
 
   // fullscreenEndColumn.addEventListener("click", function(e) {
@@ -73,38 +106,81 @@ function App() {
         <div slot="startColumn">
           <ui5-shellbar
             primary-title="React App"
-            
+
           >
             <ui5-avatar slot="profile" icon="customer"></ui5-avatar>
           </ui5-shellbar>
+          <ui5-table class="demo-table" id="table" ref={col1list}>
 
-          <ui5-list ref={col1list} header-text="List of Products">
-            <ui5-li description="HT-2000" additional-text="449.00 EUR" >HP Laptop</ui5-li>
-            <ui5-li description="HT-2001" additional-text="499.00 EUR" >Apple iPhone</ui5-li>
-            <ui5-li description="HT-2002" additional-text="159.00 EUR" >Samsung TV</ui5-li>
-            <ui5-li description="HT-2003" additional-text="229.00 EUR" >LG Dishwasher</ui5-li>
-          </ui5-list>
+            <ui5-table-column slot="columns">
+              <span >ID</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" >
+              <span >Name</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" popin-text="Email" demand-popin class="table-header-text-alignment">
+              <span >E-Mail</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" popin-text="UserName" demand-popin class="table-header-text-alignment">
+              <span >User Name</span>
+            </ui5-table-column>
+
+
+            {contacts.map(({ id, name, email, username }) => (
+              <ui5-table-row type="Active" navigated>
+                <ui5-table-cell>{id}</ui5-table-cell>
+                <ui5-table-cell>{name}</ui5-table-cell>
+                <ui5-table-cell>{email}</ui5-table-cell>
+                <ui5-table-cell>{username}</ui5-table-cell>
+              </ui5-table-row>
+            ))}
+
+          </ui5-table>
+          {/* <ui5-list ref={col1list} header-text="List of Products">
+          {contacts.map(({ name, email, username }) => (
+            <ui5-li description={email} additional-text={username}>{name}</ui5-li>
+          ))}
+          </ui5-list> */}
         </div>
 
         <div slot="midColumn">
           <div className="App">
-            <ui5-button design="Emphasized">Edit</ui5-button>
-            <ui5-button design="Transparent" icon="add"></ui5-button>
+            {/* <ui5-button design="Emphasized">Edit</ui5-button> */}
+            {/* <ui5-button design="Transparent" icon="add"></ui5-button> */}
             <ui5-button ref={fullscreenMidColumn} design="Transparent" icon="full-screen"></ui5-button>
             <ui5-button ref={closeMidColumn} icon="decline" design="Transparent"></ui5-button>
           </div>
 
-          <ui5-list ref={col2list} header-text="Suppliers">
+          <ui5-tabcontainer class="full-width">
+            <ui5-tab icon="address-book" text="Contact">
+              <ui5-label id="myLabelPhone" for="idTextPhone" show-colon>Phone</ui5-label>
+              <ui5-text id="idTextPhone">1-770-736-8031 x56442</ui5-text>
+              
+              <ui5-label id="myLabelWebsite" for="idTextWebsite" show-colon>Website</ui5-label>
+              <ui5-text id="idTextWebsite">hildegard.org</ui5-text>
+            </ui5-tab>
+            <ui5-tab icon="addresses" text="Address" >
+              <ui5-label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga magni facere error dicta beatae optio repudiandae vero, quidem voluptatibus perferendis eum maiores rem tempore voluptates aperiam eos enim delectus unde.</ui5-label>
+            </ui5-tab>
+            <ui5-tab icon="building" text="Company">
+              <ui5-label>Dignissimos debitis architecto temporibus doloribus reiciendis libero rem nemo, nobis quidem dolor praesentium, beatae voluptatum iste eveniet, nam voluptatem obcaecati ducimus dolore.</ui5-label>
+            </ui5-tab>
+            
+          </ui5-tabcontainer>
+          {/* <ui5-list ref={col2list} header-text="Suppliers">
             <ui5-li >Amazon</ui5-li>
             <ui5-li >Flipkart</ui5-li>
             <ui5-li >Croma</ui5-li>
-          </ui5-list>
+          </ui5-list> */}
         </div>
 
         <div slot="endColumn">
           <div className="App">
-            <ui5-button design="Emphasized">Edit</ui5-button>
-            <ui5-button design="Transparent" icon="add"></ui5-button>
+            {/* <ui5-button design="Emphasized">Edit</ui5-button> */}
+            {/* <ui5-button design="Transparent" icon="add"></ui5-button> */}
             <ui5-button ref={fullscreenEndColumn} design="Transparent" icon="full-screen"></ui5-button>
             <ui5-button ref={closeEndColumn} icon="decline" design="Transparent"></ui5-button>
           </div>
