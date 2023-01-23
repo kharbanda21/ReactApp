@@ -202,12 +202,18 @@ function App() {
             </ui5-tab>
             
             <ui5-tab icon="building" text="Company">
-              <ui5-label show-colon>Name</ui5-label>
+              <div class="form">
+              <ui5-label show-colon class="labelClass">Name</ui5-label>
               <ui5-text >{selected.company}</ui5-text>
-              <ui5-label show-colon>Work</ui5-label>
+              </div>
+              <div class="form">
+              <ui5-label show-colon class="labelClass">Work </ui5-label>
               <ui5-text >{selected.work}</ui5-text>
-              <ui5-label show-colon>Role</ui5-label>
+              </div>
+              <div class="form">
+              <ui5-label show-colon class="labelClass">Role</ui5-label>
               <ui5-text >{selected.role}</ui5-text>
+              </div>
             </ui5-tab>
           </ui5-tabcontainer>
           {/* <ui5-list ref={col2list} header-text="Suppliers">
