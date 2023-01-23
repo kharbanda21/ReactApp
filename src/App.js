@@ -185,15 +185,22 @@ function App() {
 
           <ui5-tabcontainer class="full-width">
             <ui5-tab icon="address-book" text="Contact">
-              <ui5-label id="myLabelPhone" for="idTextPhone" show-colon>Phone</ui5-label>
-              <ui5-text id="idTextPhone">{selected.phone}</ui5-text>
               
-              <ui5-label id="myLabelWebsite" for="idTextWebsite" show-colon>Website</ui5-label>
+              <div class="form">
+                <ui5-label class="labelClass">Address: </ui5-label>
+                <ui5-text>{selected.address}</ui5-text>
+              </div>
+              <div class="form">
+              <ui5-label id="myLabelPhone" for="idTextPhone" show-colon class="labelClassPh">Phone</ui5-label>
+              <ui5-text id="idTextPhone">{selected.phone}</ui5-text>
+              </div>
+              <div class="form">
+              <ui5-label id="myLabelWebsite" for="idTextWebsite" show-colon class="labelClass">Website</ui5-label>
               <ui5-text id="idTextWebsite">{selected.website}</ui5-text>
+              </div>
+              
             </ui5-tab>
-            <ui5-tab icon="addresses" text="Address" >
-              <ui5-text>{selected.address}</ui5-text>
-            </ui5-tab>
+            
             <ui5-tab icon="building" text="Company">
               <ui5-label show-colon>Name</ui5-label>
               <ui5-text >{selected.company}</ui5-text>

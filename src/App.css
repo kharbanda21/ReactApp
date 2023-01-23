@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+.form {
+  margin: 10px;
+}
+
+.labelClass {
+  margin-right: 50px;
+}
+
+.labelClassPh {
+  margin-right: 59px;
+}
+
