@@ -18,7 +18,20 @@ import "@ui5/webcomponents/dist/TabSeparator";
 
 function App() {
   const [contacts, setContacts] = useState([]);
+  const [selected, setSelected] = useState({
+    id: 0,
+		name: "",
+		username: "",
+    email: "",
+    address: "",
+    phone: "",
+    website: "",
+    company: "",
+    work: "",
+    role: ""
+  });
   const [error, setError] = useState(null);
+  
   const fcl = useRef();
 
   const col1list = useRef();
@@ -30,9 +43,25 @@ function App() {
   const fullscreenMidColumn = useRef();
   const fullscreenEndColumn = useRef();
 
-  const handleRowClick = useCallback(() => {
+  const handleRowClick = useCallback((event) => {
+    let sId = event.detail.row.visibleCells[0].innerText;
+    const contactsObj = contacts.filter((contact) => {
+      return contact.id == sId;
+    })[0];
+    setSelected(() => ({
+      id: contactsObj.id,
+      name: contactsObj.name,
+      username: contactsObj.username,
+      email: contactsObj.email,
+      address: contactsObj.address.suite + ", " + contactsObj.address.street + ", " + contactsObj.address.city + " - " + contactsObj.address.zipcode,
+      phone: contactsObj.phone,
+      website: contactsObj.website,
+      company: contactsObj.company.name,
+      work: contactsObj.company.catchPhrase,
+      role: contactsObj.company.bs
+    }));
     fcl.current.layout = "TwoColumnsMidExpanded";
-  }, []);
+  }, [contacts,setSelected]);
 
   const handleRowClick2 = useCallback(() => {
     fcl.current.layout = "ThreeColumnsEndExpanded";
@@ -74,7 +103,7 @@ function App() {
       })
       .catch(setError);
 
-  }, []);
+  }, [setContacts]);
 
   useEffect(() => {
     col1list.current.addEventListener("row-click", handleRowClick);
@@ -157,18 +186,22 @@ function App() {
           <ui5-tabcontainer class="full-width">
             <ui5-tab icon="address-book" text="Contact">
               <ui5-label id="myLabelPhone" for="idTextPhone" show-colon>Phone</ui5-label>
-              <ui5-text id="idTextPhone">1-770-736-8031 x56442</ui5-text>
+              <ui5-text id="idTextPhone">{selected.phone}</ui5-text>
               
               <ui5-label id="myLabelWebsite" for="idTextWebsite" show-colon>Website</ui5-label>
-              <ui5-text id="idTextWebsite">hildegard.org</ui5-text>
+              <ui5-text id="idTextWebsite">{selected.website}</ui5-text>
             </ui5-tab>
             <ui5-tab icon="addresses" text="Address" >
-              <ui5-label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga magni facere error dicta beatae optio repudiandae vero, quidem voluptatibus perferendis eum maiores rem tempore voluptates aperiam eos enim delectus unde.</ui5-label>
+              <ui5-text>{selected.address}</ui5-text>
             </ui5-tab>
             <ui5-tab icon="building" text="Company">
-              <ui5-label>Dignissimos debitis architecto temporibus doloribus reiciendis libero rem nemo, nobis quidem dolor praesentium, beatae voluptatum iste eveniet, nam voluptatem obcaecati ducimus dolore.</ui5-label>
+              <ui5-label show-colon>Name</ui5-label>
+              <ui5-text >{selected.company}</ui5-text>
+              <ui5-label show-colon>Work</ui5-label>
+              <ui5-text >{selected.work}</ui5-text>
+              <ui5-label show-colon>Role</ui5-label>
+              <ui5-text >{selected.role}</ui5-text>
             </ui5-tab>
-            
           </ui5-tabcontainer>
           {/* <ui5-list ref={col2list} header-text="Suppliers">
             <ui5-li >Amazon</ui5-li>
