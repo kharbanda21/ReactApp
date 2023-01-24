@@ -16,12 +16,14 @@ import "@ui5/webcomponents/dist/TabContainer";
 import "@ui5/webcomponents/dist/Tab";
 import "@ui5/webcomponents/dist/TabSeparator";
 
+import "@ui5/webcomponents/dist/Avatar.js";
+
 function App() {
   const [contacts, setContacts] = useState([]);
   const [selected, setSelected] = useState({
     id: 0,
-		name: "",
-		username: "",
+    name: "",
+    username: "",
     email: "",
     address: "",
     phone: "",
@@ -31,7 +33,7 @@ function App() {
     role: ""
   });
   const [error, setError] = useState(null);
-  
+
   const fcl = useRef();
 
   const col1list = useRef();
@@ -61,7 +63,7 @@ function App() {
       role: contactsObj.company.bs
     }));
     fcl.current.layout = "TwoColumnsMidExpanded";
-  }, [contacts,setSelected]);
+  }, [contacts, setSelected]);
 
   const handleRowClick2 = useCallback(() => {
     fcl.current.layout = "ThreeColumnsEndExpanded";
@@ -182,37 +184,40 @@ function App() {
             <ui5-button ref={fullscreenMidColumn} design="Transparent" icon="full-screen"></ui5-button>
             <ui5-button ref={closeMidColumn} icon="decline" design="Transparent"></ui5-button>
           </div>
-
+          <div class="classAvatarPage2">
+            <ui5-avatar icon="employee" size="XL"></ui5-avatar>
+            <ui5-title level="H4" class="classTitleName">{selected.name} ({selected.username})</ui5-title>
+          </div>
           <ui5-tabcontainer class="full-width">
             <ui5-tab icon="address-book" text="Contact">
-              
+
               <div class="form">
-                <ui5-label class="labelClass">Address: </ui5-label>
+                <ui5-label class="labelClassAdd">Address: </ui5-label>
                 <ui5-text>{selected.address}</ui5-text>
               </div>
               <div class="form">
-              <ui5-label id="myLabelPhone" for="idTextPhone" show-colon class="labelClassPh">Phone</ui5-label>
-              <ui5-text id="idTextPhone">{selected.phone}</ui5-text>
+                <ui5-label id="myLabelPhone" for="idTextPhone" show-colon class="labelClassPh">Phone</ui5-label>
+                <ui5-text id="idTextPhone">{selected.phone}</ui5-text>
               </div>
               <div class="form">
-              <ui5-label id="myLabelWebsite" for="idTextWebsite" show-colon class="labelClass">Website</ui5-label>
-              <ui5-text id="idTextWebsite">{selected.website}</ui5-text>
+                <ui5-label id="myLabelWebsite" for="idTextWebsite" show-colon class="labelClassWeb">Website</ui5-label>
+                <ui5-text id="idTextWebsite">{selected.website}</ui5-text>
               </div>
-              
+
             </ui5-tab>
-            
+
             <ui5-tab icon="building" text="Company">
               <div class="form">
-              <ui5-label show-colon class="labelClass">Name</ui5-label>
-              <ui5-text >{selected.company}</ui5-text>
+                <ui5-label show-colon class="classLabelCompany">Name</ui5-label>
+                <ui5-text >{selected.company}</ui5-text>
               </div>
               <div class="form">
-              <ui5-label show-colon class="labelClass">Work </ui5-label>
-              <ui5-text >{selected.work}</ui5-text>
+                <ui5-label show-colon class="classLabelWork">Work </ui5-label>
+                <ui5-text >{selected.work}</ui5-text>
               </div>
               <div class="form">
-              <ui5-label show-colon class="labelClass">Role</ui5-label>
-              <ui5-text >{selected.role}</ui5-text>
+                <ui5-label show-colon class="classLabelRole">Role</ui5-label>
+                <ui5-text >{selected.role}</ui5-text>
               </div>
             </ui5-tab>
           </ui5-tabcontainer>

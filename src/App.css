@@ -41,7 +41,7 @@
   margin: 10px;
 }
 
-.labelClass {
+.labelClassWeb {
   margin-right: 50px;
 }
 
@@ -49,3 +49,27 @@
   margin-right: 59px;
 }
 
+.labelClassAdd {
+  margin-right: 49px;
+}
+
+.classLabelCompany {
+  margin-right: 53px;
+}
+
+.classLabelWork {
+  margin-right: 59px;
+}
+
+.classLabelRole {
+  margin-right: 63px;
+}
+
+.classAvatarPage2 {
+  margin-bottom: 30px;
+  margin-left: 20px;
+}
+
+.classTitleName {
+  margin-top: 10px;
+}
